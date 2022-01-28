@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class TodoScreen extends StatefulWidget {
-  TodoScreen({Key? key}) : super(key: key);
+  const TodoScreen({Key? key}) : super(key: key);
 
   @override
   _TodoScreenState createState() => _TodoScreenState();
@@ -175,9 +175,9 @@ class _TodoScreenState extends State<TodoScreen> {
           var aa = DataModel(l[0][i], l[0][i + 1], DateTime.parse(l[0][i + 2]),
               DateTime.parse(l[0][i + 3]));
           mylist.add(l[0][i]);
-          mylist.add(l[0][i+1]);
-          mylist.add(l[0][i+2]);
-          mylist.add(l[0][i+3]);
+          mylist.add(l[0][i + 1]);
+          mylist.add(l[0][i + 2]);
+          mylist.add(l[0][i + 3]);
           dataList.add(aa);
         }
 
@@ -217,7 +217,7 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   loadData() {
-    final m = sharedPreferences!.getStringList("mylist4");
+    final m = sharedPreferences!.getStringList("mylist4") ?? [];
     mylist.addAll(m ?? []);
 
     final len = mylist.length;
@@ -267,7 +267,7 @@ class _TodoScreenState extends State<TodoScreen> {
         onPressed: () {
           titleController.text = "";
           contentController.text = "";
-
+          DateTime? due = DateTime.now();
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => Center(
@@ -327,8 +327,11 @@ class _TodoScreenState extends State<TodoScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          saveData(titleController.text, contentController.text,
-                              due.toString(), DateTime.now().toString());
+                          saveData(
+                              titleController.text ?? " ",
+                              contentController.text ?? " ",
+                              due.toString(),
+                              DateTime.now().toString());
                           Navigator.pop(context, 'Add');
                         },
                         child: const Text('Add'),
